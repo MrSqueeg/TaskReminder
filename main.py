@@ -1,9 +1,9 @@
 import menu
 
-# Window
 menu = menu.app_menu()
 
 def main():
+    # Startup
     menu.working_menu()
     menu.window.mainloop()
 

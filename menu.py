@@ -1,6 +1,9 @@
 import tkinter as tk
 import ttkbootstrap as ttk
 import time
+import tasks
+
+tasks.load_tasks()
 
 class app_menu():
     # Menu initial setup
@@ -25,10 +28,15 @@ class app_menu():
         frame = ttk.Frame(master = self.window)
         button = ttk.Button(master = frame, text = 'swap menu', command = self.working_menu)
         button.pack(side = 'left', padx = 10)
+        add_task = ttk.Button(master = frame, text = 'add task', command = self.working_menu)
+        add_task.pack(side = 'left', padx = 10)
+        name = ttk.Entry(master = frame, text = 'add task', command = self.working_menu)
+        name.pack(side = 'left', padx = 10)
         frame.pack(pady = 10)
 
     def working_menu(self):
         self.reset_window()
+        tasks.list_tasks()
 
         title_label = ttk.Label(master = self.window, text = 'Are you working?', font = 'Calibri 24 bold')
         title_label.pack()
