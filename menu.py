@@ -13,6 +13,10 @@ class app_menu():
     height = window.winfo_screenheight()               
     window.geometry("%dx%d" % (width, height))
     popup_time = 5
+
+    add_name = tk.StringVar(window)
+    add_desc = tk.StringVar(window)
+    add_due = tk.StringVar(window)
     
     def reset_window(self):
         for widget in self.window.winfo_children():
@@ -22,23 +26,44 @@ class app_menu():
         self.reset_window()
 
         # Title
-        title_label = ttk.Label(master = self.window, text = 'Test label', font = 'Calibri 24 bold')
+        title_label = ttk.Label(master = self.window, text = 'To do:', font = 'Calibri 24 bold')
         title_label.pack()
 
         frame = ttk.Frame(master = self.window)
         button = ttk.Button(master = frame, text = 'swap menu', command = self.working_menu)
         button.pack(side = 'left', padx = 10)
-        add_task = ttk.Button(master = frame, text = 'add task', command = self.working_menu)
-        add_task.pack(side = 'left', padx = 10)
-        name = ttk.Entry(master = frame, text = 'add task', command = self.working_menu)
+
+        # Test add task entries
+        name = ttk.Entry(master = frame, text = 'name', textvariable=self.add_name)
         name.pack(side = 'left', padx = 10)
+        desc = ttk.Entry(master = frame, text = 'description', textvariable=self.add_desc)
+        desc.pack(side = 'left', padx = 10)
+        due = ttk.Entry(master = frame, text = 'due', textvariable=self.add_due)
+        due.pack(side = 'left', padx = 10)
+        add_task = ttk.Button(master = frame, text = 'add task', command = self.get_entries)
+        add_task.pack(side = 'left', padx = 10)
         frame.pack(pady = 10)
+
+    def get_entries(self):
+        tasks.add_task(self.add_name.get(), self.add_desc.get(), self.add_due.get())
 
     def working_menu(self):
         self.reset_window()
         tasks.list_tasks()
 
         title_label = ttk.Label(master = self.window, text = 'Are you working?', font = 'Calibri 24 bold')
+        title_label.pack()
+
+        frame = ttk.Frame(master = self.window)
+        yes_button = ttk.Button(master = frame, text = 'Yes', command = self.working)
+        no_button = ttk.Button(master = frame, text = 'No', command = self.not_working)
+        yes_button.pack(side = 'left', padx = 10)
+        no_button.pack(side = 'left', padx = 10)
+        frame.pack(pady = 10)
+
+    def warning_menu(self, task):
+        self.reset_window()
+        title_label = ttk.Label(master = self.window, text = f'Hey, {task.name} is due soon.\nAre you working on it?', font = 'Calibri 24 bold')
         title_label.pack()
 
         frame = ttk.Frame(master = self.window)

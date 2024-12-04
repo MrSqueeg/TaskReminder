@@ -1,5 +1,6 @@
 import menu
 import csv
+import datetime
 
 task_list = []
 tasks_file = "tasks.csv"
@@ -14,23 +15,33 @@ def list_tasks():
         print(f'Name: {task.name}, Desc: {task.desc}, Due: {task.due}')
 
 def add_task(name, desc, due):
+    # Check correct date format
+    try:
+        datetime.datetime.strptime(due, "%Y-%m-%d-%H")
+    except ValueError:
+        print("Invalid date format")
+        return
+
     with open(tasks_file, 'r+', newline='') as infile:
         fields = ['name', 'desc', 'due']
 
         writer = csv.DictWriter(infile, fieldnames=fields)
 
+        # If Empty file write csv header / fields
         csv_dict = [row for row in csv.DictReader(infile)]
         if len(csv_dict) == 0:
             writer.writeheader()
             
-        writer.writerow({'name': name, 'desc': desc, 'due': due})
+        writer.writerow({'name': name, 'desc': desc, 'due': due}) # Add to file
 
     new_task = task()
     new_task.name = name
     new_task.desc = desc
     new_task.due = due
 
-    task_list.append(new_task)
+    task_list.append(new_task) # Add to list / cache
+
+    print(f'Added task: {name}')
 
 def load_tasks():
     with open(tasks_file, newline='') as infile:
