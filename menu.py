@@ -40,11 +40,11 @@ class app_menu():
         desc.pack(side = 'left', padx = 10)
         due = ttk.Entry(master = frame, text = 'due', textvariable=self.add_due)
         due.pack(side = 'left', padx = 10)
-        add_task = ttk.Button(master = frame, text = 'add task', command = self.get_entries)
+        add_task = ttk.Button(master = frame, text = 'add task', command = self.add_task)
         add_task.pack(side = 'left', padx = 10)
         frame.pack(pady = 10)
 
-    def get_entries(self):
+    def add_task(self):
         tasks.add_task(self.add_name.get(), self.add_desc.get(), self.add_due.get())
 
     def working_menu(self):
@@ -61,7 +61,7 @@ class app_menu():
         no_button.pack(side = 'left', padx = 10)
         frame.pack(pady = 10)
 
-    def warning_menu(self, task):
+    def warning_menu(self, task: tasks.Task_node):
         self.reset_window()
         title_label = ttk.Label(master = self.window, text = f'Hey, {task.name} is due soon.\nAre you working on it?', font = 'Calibri 24 bold')
         title_label.pack()

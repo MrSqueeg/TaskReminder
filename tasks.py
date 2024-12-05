@@ -2,17 +2,43 @@ import menu
 import csv
 import datetime
 
-task_list = []
 tasks_file = "tasks.csv"
 
-class task:
-    name = None
-    desc = None
-    due = None
+class Task_node:
+    def __init__(self):
+        self.name = None
+        self.desc = None
+        self.due = None
+        self.next = None
+
+class Task_list:
+    def __init__(self):
+        self.head = None
+
+    def add_to_list(self, to_add: Task_node):
+        temp = self.head
+        self.head = to_add
+        self.head.next = temp
+
+    def remove_task(self, name: str):
+        curr = self.head
+        prev = curr
+        while curr:
+            if curr.name == name:
+                prev.next = curr.next
+                del curr
+                curr = None
+            else:
+                prev = curr
+                curr = curr.next
+
+task_list = Task_list()
 
 def list_tasks():
-    for task in task_list:
-        print(f'Name: {task.name}, Desc: {task.desc}, Due: {task.due}')
+    curr = task_list.head
+    while curr:
+        print(f'Name: {curr.name}, Desc: {curr.desc}, Due: {curr.due}')
+        curr = curr.next
 
 def add_task(name, desc, due):
     # Check correct date format
@@ -34,23 +60,23 @@ def add_task(name, desc, due):
             
         writer.writerow({'name': name, 'desc': desc, 'due': due}) # Add to file
 
-    new_task = task()
+    new_task = Task_node
     new_task.name = name
     new_task.desc = desc
     new_task.due = due
 
-    task_list.append(new_task) # Add to list / cache
+    task_list.add_to_list(new_task) # Add to list / cache
 
     print(f'Added task: {name}')
 
 def load_tasks():
-    with open(tasks_file, newline='') as infile:
+    with open(tasks_file, 'a+', newline='') as infile:
         reader = csv.DictReader(infile)
         next(reader, None)
         for row in reader:
-            new_task = task()
+            new_task = Task_node()
             new_task.name = row['name']
             new_task.desc = row['desc']
             new_task.due = row['due']
 
-            task_list.append(new_task)   
+            task_list.add_to_list(new_task)
